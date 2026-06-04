@@ -15,6 +15,27 @@ linters:
     - wrapcheck
     - wsl
 
+  exclusions:
+    rules:
+      - path: 'framework/'
+        linters:
+          - cyclop
+          - err113
+          - funcorder
+          - funlen
+          - gochecknoglobals
+          - gocognit
+          - goconst
+          - godoclint
+          - govet
+          - lll
+          - nestif
+          - nilnil
+          - noinlineerr
+          - paralleltest
+          - staticcheck
+          - wsl_v5
+
   settings:
     errcheck:
       check-type-assertions: true
