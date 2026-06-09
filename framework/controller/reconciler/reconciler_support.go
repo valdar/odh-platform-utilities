@@ -178,6 +178,12 @@ func (b *ReconcilerBuilder[T]) WithPartOfLabel(key string) *ReconcilerBuilder[T]
 	return b
 }
 
+// WithoutConditionCleanup disables automatic stale condition cleanup after reconciliation.
+func (b *ReconcilerBuilder[T]) WithoutConditionCleanup() *ReconcilerBuilder[T] {
+	b.reconcilerOpts = append(b.reconcilerOpts, WithSkipConditionCleanup())
+	return b
+}
+
 // WithReconcilerOpts passes additional functional options to the underlying Reconciler
 // created during Build. Use this to set release info, finalizer name, phase names, etc.
 func (b *ReconcilerBuilder[T]) WithReconcilerOpts(opts ...ReconcilerOpt) *ReconcilerBuilder[T] {
@@ -409,6 +415,7 @@ func (b *ReconcilerBuilder[T]) Build(_ context.Context) (*Reconciler, error) {
 	}
 
 	c = c.For(resources.GvkToUnstructured(b.input.gvk), forOpts...)
+	c = c.Named(name)
 
 	var staticOwnedGVKs []schema.GroupVersionKind
 
@@ -452,6 +459,8 @@ func (b *ReconcilerBuilder[T]) Build(_ context.Context) (*Reconciler, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	r.Controller = cc
 
 	r.AddAction(
 		newDynamicWatchAction(

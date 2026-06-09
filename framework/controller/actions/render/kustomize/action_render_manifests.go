@@ -91,9 +91,14 @@ func (a *Action) render(ctx context.Context, rr *types.ReconciliationRequest) (r
 	}
 
 	for i := range rr.Manifests {
+		perManifestOpts := renderOpts
+		if rr.Manifests[i].Namespace != "" {
+			perManifestOpts = append(append([]RenderOpt{}, renderOpts...), WithNamespace(rr.Manifests[i].Namespace))
+		}
+
 		renderedResources, err := a.engine.Render(
 			rr.Manifests[i].String(),
-			renderOpts...,
+			perManifestOpts...,
 		)
 
 		if err != nil {

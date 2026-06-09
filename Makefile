@@ -31,29 +31,36 @@ fmt: ## Run gofmt and golangci-lint formatter.
 	@if [ -n "$(GOLANGCI_LINT)" ]; then golangci-lint fmt; fi
 
 .PHONY: vet
-vet: ## Run go vet.
+vet: ## Run go vet across all modules.
 	go vet ./...
+	cd framework && go vet ./...
 
 .PHONY: lint
-lint: golangci-lint ## Run golangci-lint.
+lint: golangci-lint ## Run golangci-lint across all modules.
 	$(GOLANGCI_LINT) run
+	cd framework && $(GOLANGCI_LINT) run
 
 .PHONY: lint-fix
-lint-fix: golangci-lint ## Run golangci-lint with --fix.
+lint-fix: golangci-lint ## Run golangci-lint with --fix across all modules.
 	$(GOLANGCI_LINT) run --fix
+	cd framework && $(GOLANGCI_LINT) run --fix
 
 .PHONY: test
-test: ## Run tests with race detector and coverage.
+test: ## Run tests with race detector and coverage across all modules.
 	go test -race -coverprofile=$(COVERAGE_FILE) ./...
+	cd framework && go test -race -coverprofile=$(COVERAGE_FILE) ./...
 
 .PHONY: tidy
-tidy: ## Run go mod tidy.
+tidy: ## Run go mod tidy across all modules.
 	go mod tidy
+	cd framework && go mod tidy
 
 .PHONY: verify-tidy
-verify-tidy: ## Verify go.mod and go.sum are tidy.
+verify-tidy: ## Verify go.mod and go.sum are tidy across all modules.
 	go mod tidy
 	@if [ -f go.sum ]; then git diff --exit-code go.mod go.sum; else git diff --exit-code go.mod; fi
+	cd framework && go mod tidy
+	@git diff --exit-code framework/go.mod framework/go.sum
 
 .PHONY: verify-fmt
 verify-fmt: ## Verify code is formatted.

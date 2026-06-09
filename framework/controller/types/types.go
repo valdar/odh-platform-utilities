@@ -44,6 +44,10 @@ type ManifestInfo struct {
 	Path       string
 	ContextDir string
 	SourcePath string
+
+	// Namespace overrides the default namespace for rendering.
+	// When empty, the render action uses the default namespace.
+	Namespace string
 }
 
 func (mi ManifestInfo) String() string {
@@ -55,6 +59,10 @@ func (mi ManifestInfo) String() string {
 
 	if mi.SourcePath != "" {
 		result = path.Join(result, mi.SourcePath)
+	}
+
+	if mi.Namespace != "" {
+		result += "@ns=" + mi.Namespace
 	}
 
 	return result
@@ -92,6 +100,10 @@ type ReconciliationRequest struct {
 	Resources  []unstructured.Unstructured
 
 	Generated bool
+
+	// Extensions holds application-specific data passed between actions.
+	// Keys should be namespaced to avoid collisions.
+	Extensions map[string]any
 }
 
 func (rr *ReconciliationRequest) AddResources(values ...client.Object) error {

@@ -124,6 +124,13 @@ func WithPreApplyFailedReason(reason string) ReconcilerOpt {
 	}
 }
 
+// WithSkipConditionCleanup disables automatic stale condition cleanup after reconciliation.
+func WithSkipConditionCleanup() ReconcilerOpt {
+	return func(reconciler *Reconciler) {
+		reconciler.skipConditionCleanup = true
+	}
+}
+
 // WithDynamicOwnership enables dynamic ownership mode for the reconciler.
 func WithDynamicOwnership(opts ...DynamicOwnershipOption) ReconcilerOpt {
 	return func(reconciler *Reconciler) {
@@ -168,6 +175,7 @@ type Reconciler struct {
 	dynamicGvks                 sync.Map
 	dynamicOwnershipEnabled     bool
 	excludeFromDynamicOwnership map[schema.GroupVersionKind]struct{}
+	skipConditionCleanup        bool
 }
 
 // NewReconciler creates a new reconciler for the given type.
@@ -452,7 +460,9 @@ func (r *Reconciler) apply(ctx context.Context, res api.PlatformObject) error {
 		}
 	}
 
-	rr.Conditions.CleanupStaleConditions()
+	if !r.skipConditionCleanup {
+		rr.Conditions.CleanupStaleConditions()
+	}
 
 	is := rr.Instance.GetStatus()
 	is.Phase = r.phaseNotReady

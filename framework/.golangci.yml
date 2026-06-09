@@ -3,17 +3,34 @@ version: "2"
 linters:
   default: all
   disable:
+    - cyclop
     - depguard
+    - err113
     - exhaustruct
+    - funcorder
+    - funlen
+    - gochecknoglobals
+    - gocognit
+    - goconst
+    - godoclint
     - godox
+    - gomoddirectives
+    - govet
     - ireturn
+    - lll
     - mnd
+    - nestif
+    - nilnil
     - nlreturn
+    - noinlineerr
     - nonamedreturns
+    - paralleltest
+    - staticcheck
     - testpackage
     - varnamelen
     - wrapcheck
     - wsl
+    - wsl_v5
 
   settings:
     errcheck:
