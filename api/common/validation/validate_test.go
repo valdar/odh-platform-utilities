@@ -48,9 +48,9 @@ type fakeModuleStatus struct {
 
 type fakeModule struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitzero"`
 
-	Status fakeModuleStatus `json:"status,omitempty"`
+	Status fakeModuleStatus `json:"status,omitzero"`
 }
 
 func (f *fakeModule) GetStatus() *common.Status {

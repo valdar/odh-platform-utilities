@@ -21,10 +21,10 @@ type testComponentStatus struct {
 
 type testComponent struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata"`
 
-	Spec   testComponentSpec   `json:"spec,omitempty"`
-	Status testComponentStatus `json:"status,omitempty"`
+	Spec   testComponentSpec   `json:"spec"`
+	Status testComponentStatus `json:"status"`
 }
 
 type testComponentSpec struct {

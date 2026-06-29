@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	common "github.com/opendatahub-io/odh-platform-utilities/api/common"
 	"github.com/opendatahub-io/odh-platform-utilities/framework/api"
 	"github.com/opendatahub-io/odh-platform-utilities/framework/controller/actions/render/kustomize"
 	"github.com/opendatahub-io/odh-platform-utilities/framework/controller/types"
@@ -34,12 +33,6 @@ func (f *fakeInstance) GetConditions() []api.Condition {
 func (f *fakeInstance) SetConditions(c []api.Condition) {
 	f.status.Conditions = c
 }
-
-func (f *fakeInstance) GetReleaseStatus() *common.ComponentReleaseStatus {
-	return nil
-}
-
-func (f *fakeInstance) SetReleaseStatus(_ common.ComponentReleaseStatus) {}
 
 func (f *fakeInstance) DeepCopyObject() runtime.Object {
 	o := *f

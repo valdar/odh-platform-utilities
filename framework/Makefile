@@ -7,10 +7,7 @@ CONTROLLER_GEN = $(shell which controller-gen 2>/dev/null)
 
 # Pin the toolchain to the exact Go version declared in go.mod so that
 # the race-instrumented stdlib is compiled with the same compiler version
-# used for user code.  Without this, `go test -race` may fail when the
-# locally installed Go (e.g. 1.25.5) differs from the go.mod directive
-# (e.g. 1.25.7) because the downloaded toolchain cannot reuse the race
-# stdlib compiled by the local install.
+# used for user code.
 GO_MOD_VERSION := $(shell awk '/^go /{print $$2; exit}' go.mod)
 export GOTOOLCHAIN := go$(GO_MOD_VERSION)
 
@@ -53,7 +50,7 @@ tidy: ## Run go mod tidy.
 .PHONY: verify-tidy
 verify-tidy: ## Verify go.mod and go.sum are tidy.
 	go mod tidy
-	@if [ -f go.sum ]; then git diff --exit-code go.mod go.sum; else git diff --exit-code go.mod; fi
+	@git diff --exit-code go.mod go.sum
 
 .PHONY: verify-fmt
 verify-fmt: ## Verify code is formatted.
@@ -61,45 +58,7 @@ verify-fmt: ## Verify code is formatted.
 
 .PHONY: verify-generate
 verify-generate: generate ## Verify generated files are up to date.
-	@git diff --quiet --exit-code api/ || (echo "Generated files are out of date. Run 'make generate' and commit." && git diff --stat api/ && exit 1)
-
-##@ All Modules
-
-.PHONY: all-modules
-all-modules: all ## Run all checks across root and framework modules.
-	$(MAKE) -C framework all
-
-.PHONY: generate-all
-generate-all: generate ## Regenerate DeepCopy methods across all modules.
-	$(MAKE) -C framework generate
-
-.PHONY: test-all
-test-all: test ## Run tests across all modules.
-	$(MAKE) -C framework test
-
-.PHONY: lint-all
-lint-all: lint ## Run golangci-lint across all modules.
-	$(MAKE) -C framework lint
-
-.PHONY: lint-fix-all
-lint-fix-all: lint-fix ## Run golangci-lint with --fix across all modules.
-	$(MAKE) -C framework lint-fix
-
-.PHONY: tidy-all
-tidy-all: tidy ## Run go mod tidy across all modules.
-	$(MAKE) -C framework tidy
-
-.PHONY: verify-fmt-all
-verify-fmt-all: verify-fmt ## Verify code formatting across all modules.
-	$(MAKE) -C framework verify-fmt
-
-.PHONY: verify-tidy-all
-verify-tidy-all: verify-tidy ## Verify go.mod/go.sum are tidy across all modules.
-	$(MAKE) -C framework verify-tidy
-
-.PHONY: verify-generate-all
-verify-generate-all: verify-generate ## Verify generated files are up to date across all modules.
-	$(MAKE) -C framework verify-generate
+	@git diff --quiet --exit-code api/ || (echo "Generated files are out of date. Run 'make -C framework generate' and commit." && git diff --stat api/ && exit 1)
 
 ##@ Tools
 

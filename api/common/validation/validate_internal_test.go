@@ -97,7 +97,7 @@ func TestValidate_ReturnsAllViolations(t *testing.T) {
 
 type brokenNilStatus struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata"`
 }
 
 func (b *brokenNilStatus) GetStatus() *common.Status { return nil }
@@ -120,7 +120,7 @@ func (b *brokenNilStatus) DeepCopyObject() runtime.Object {
 
 type brokenNilReleaseStatus struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata"`
 
 	status common.Status
 }
@@ -151,7 +151,7 @@ func (b *brokenNilReleaseStatus) DeepCopyObject() runtime.Object {
 
 type brokenConditionsNotStored struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata"`
 
 	releases common.ComponentReleaseStatus
 	status   common.Status
@@ -183,7 +183,7 @@ func (b *brokenConditionsNotStored) DeepCopyObject() runtime.Object {
 
 type brokenReleasesNotStored struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata"`
 
 	releases common.ComponentReleaseStatus
 	status   common.Status
@@ -215,7 +215,7 @@ func (b *brokenReleasesNotStored) DeepCopyObject() runtime.Object {
 
 type brokenPhaseNotWritable struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata"`
 
 	releases common.ComponentReleaseStatus
 	status   common.Status

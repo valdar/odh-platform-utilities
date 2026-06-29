@@ -30,7 +30,7 @@ jobs:
           fi
 
       - name: Run tests
-        run: make test
+        run: make test-all
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
