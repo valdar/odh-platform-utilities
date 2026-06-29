@@ -20,9 +20,9 @@ import (
 // testPlatformObject is a minimal PlatformObject for testing.
 type testPlatformObject struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitzero"`
 
-	Status testStatus `json:"status,omitempty"`
+	Status testStatus `json:"status,omitzero"`
 }
 
 type testStatus struct {
@@ -94,7 +94,7 @@ func TestReconciliationRequest_ManualInitialization(t *testing.T) {
 		Instance:   obj,
 		Conditions: mgr,
 		Resources: []unstructured.Unstructured{
-			{Object: map[string]interface{}{"kind": "ConfigMap"}},
+			{Object: map[string]any{"kind": "ConfigMap"}},
 		},
 	}
 
@@ -109,7 +109,7 @@ func TestFn_SignatureCompatibility(t *testing.T) {
 
 	var fn action.Fn = func(_ context.Context, rr *action.ReconciliationRequest) error {
 		rr.Resources = append(rr.Resources, unstructured.Unstructured{
-			Object: map[string]interface{}{"kind": "Service"},
+			Object: map[string]any{"kind": "Service"},
 		})
 
 		return nil
@@ -128,8 +128,8 @@ func TestFn_PipelineAccumulatesResources(t *testing.T) {
 
 	render := action.Fn(func(_ context.Context, rr *action.ReconciliationRequest) error {
 		rr.Resources = append(rr.Resources,
-			unstructured.Unstructured{Object: map[string]interface{}{"kind": "ConfigMap"}},
-			unstructured.Unstructured{Object: map[string]interface{}{"kind": "Deployment"}},
+			unstructured.Unstructured{Object: map[string]any{"kind": "ConfigMap"}},
+			unstructured.Unstructured{Object: map[string]any{"kind": "Deployment"}},
 		)
 
 		return nil

@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	gTypes "github.com/onsi/gomega/types"
-	common "github.com/opendatahub-io/odh-platform-utilities/api/common"
 	"github.com/opendatahub-io/odh-platform-utilities/framework/api"
 	"github.com/opendatahub-io/odh-platform-utilities/framework/controller/types"
 	"github.com/opendatahub-io/odh-platform-utilities/framework/resources"
@@ -42,12 +41,6 @@ func (t *testPlatformObject) GetConditions() []api.Condition {
 }
 
 func (t *testPlatformObject) SetConditions(_ []api.Condition) {}
-
-func (t *testPlatformObject) GetReleaseStatus() *common.ComponentReleaseStatus {
-	return nil
-}
-
-func (t *testPlatformObject) SetReleaseStatus(_ common.ComponentReleaseStatus) {}
 
 func newTestPlatformObject(gvk schema.GroupVersionKind, opts ...func(*unstructured.Unstructured)) *testPlatformObject {
 	obj := &testPlatformObject{}

@@ -36,8 +36,8 @@ const (
 )
 
 const (
-	DefaultPhaseReady    api.Phase = "Ready"
-	DefaultPhaseNotReady api.Phase = "Not Ready"
+	DefaultPhaseReady    string = "Ready"
+	DefaultPhaseNotReady string = "Not Ready"
 )
 
 type gvkInfo struct {
@@ -102,7 +102,7 @@ func WithProvisioningConditionType(conditionType string) ReconcilerOpt {
 }
 
 // WithPhaseNames sets the phase names used for ready and not-ready states.
-func WithPhaseNames(ready, notReady api.Phase) ReconcilerOpt {
+func WithPhaseNames(ready, notReady string) ReconcilerOpt {
 	return func(reconciler *Reconciler) {
 		reconciler.phaseReady = ready
 		reconciler.phaseNotReady = notReady
@@ -166,8 +166,8 @@ type Reconciler struct {
 	finalizerName               string
 	provisioningConditionType   string
 	preApplyFailedReason        string
-	phaseReady                  api.Phase
-	phaseNotReady               api.Phase
+	phaseReady                  string
+	phaseNotReady               string
 	preApplyFn                  PreApplyFn
 	instanceFactory             func() (api.PlatformObject, error)
 	conditionsManagerFactory    func(api.ConditionsAccessor) *conditions.Manager

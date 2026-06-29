@@ -21,9 +21,7 @@ jobs:
           go-version-file: go.mod
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v7
-        with:
-          version: v2.5.0
+        run: make lint-all
 
   test:
     name: Test
@@ -35,14 +33,17 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Run tests
+      - name: Run tests (root)
         run: make test
+
+      - name: Run tests (framework)
+        run: make -C framework test
 
       - name: Upload coverage to Codecov
         if: github.event_name == 'pull_request'
         uses: codecov/codecov-action@v4
         with:
-          files: cover.out
+          files: cover.out,framework/cover.out
           fail_ci_if_error: false
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -58,7 +59,7 @@ jobs:
           go-version-file: go.mod
 
       - name: Verify go mod tidy
-        run: make verify-tidy
+        run: make verify-tidy-all
 
       - name: Verify formatting
         run: make verify-fmt

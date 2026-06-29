@@ -20,9 +20,9 @@ import (
 // testPlatformObject is a minimal PlatformObject for testing.
 type testPlatformObject struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitzero"`
 
-	Status testStatus `json:"status,omitempty"`
+	Status testStatus `json:"status,omitzero"`
 }
 
 type testStatus struct {
